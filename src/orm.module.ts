@@ -3,8 +3,7 @@ import { Module, DynamicModule, Provider, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { createServiceProviders } from './service.provider';
 import { OrmConfig, OrmAsyncConfig } from './orm.interface';
-import { createOrmAsyncOptionsProvider } from './orm.provider';
-import { ORM_OPTION } from './orm.constants';
+import { createOrmAsyncOptionsProvider, getOrmOptionToken } from './orm.provider';
 
 @Module({})
 class OrmConfigModule {
@@ -26,10 +25,10 @@ export class OrmModule {
       imports: [OrmConfigModule.forRootAsync(options)],
       name: options.name,
       useFactory: (ormConfig: OrmConfig) => ormConfig,
-      inject: [ORM_OPTION],
+      inject: [getOrmOptionToken(options.name)],
     });
     const groups: { [props: string]: Function[] } = {};
-    const tables = getMetadataArgsStorage().tables;
+    const tables = getMetadataArgsStorage().tables.filter(table => !table.database || table.database === options.name || table.database === 'default');
     for (const table of tables) {
       const key = table.database || 'default';
       if (!groups[key]) {

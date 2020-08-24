@@ -3,7 +3,6 @@ export * from '@nestjs/typeorm';
 export * from './orm.module';
 export * from './orm.logger';
 export * from './orm.provider';
-export * from './orm.constants';
 export * from './orm.interface';
 export * from './snake_naming.strategy';
 export * from './basic.service';

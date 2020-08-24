@@ -1,1 +1,0 @@
-export const ORM_OPTION = Symbol('ORM_OPTION');

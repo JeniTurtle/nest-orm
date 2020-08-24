@@ -1,14 +1,17 @@
 import * as path from 'path';
 import { Provider, Logger } from '@nestjs/common';
-import { ORM_OPTION } from './orm.constants';
 import { OrmAsyncConfig } from './orm.interface';
 import { OrmLogger } from './orm.logger';
+
+export function getOrmOptionToken(database: string = 'default') {
+  return 'TYPEORM_OPTIONS_' + database;
+}
 
 export function createOrmAsyncOptionsProvider(
   options: OrmAsyncConfig,
 ): Provider {
   return {
-    provide: ORM_OPTION,
+    provide: getOrmOptionToken(options.name),
     useFactory: async (...args) => {
       const config = await options.useFactory(...args);
       const dirs = ['entities', 'migrations', 'subscribers'];
