@@ -12,7 +12,7 @@ export class OrmHepler {
     }
     if (_.isArray(target)) {
       // @ts-ignore
-      target.forEach(item => HttpHepler._snakeToHump(item));
+      target.forEach(item => OrmHepler._snakeToHump(item));
     } else {
       for (const key in target) {
         const newKey = _.camelCase(key);
@@ -39,7 +39,7 @@ export class OrmHepler {
     }
     if (_.isArray(target)) {
       // @ts-ignore
-      target.forEach(item => HttpHepler._humpToSnake(item));
+      target.forEach(item => OrmHepler._humpToSnake(item));
     } else {
       for (const key in target) {
         const newKey = _.snakeCase(key);
