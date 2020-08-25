@@ -10,7 +10,7 @@ function eqHandle(scope: ScopeOptions, conditions: any[]) {
   if (scope.value === null) {
     condition = `${scope.column} IS NULL`;
   }
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function notHandle(scope: ScopeOptions, conditions: any[]) {
@@ -18,47 +18,47 @@ function notHandle(scope: ScopeOptions, conditions: any[]) {
   if (scope.value === null) {
     condition = `${scope.column} IS NOT NULL`;
   }
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function ltHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `${scope.column} < ${scope.value}`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function lteHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `${scope.column} <= ${scope.value}`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function gtHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `${scope.column} > ${scope.value}`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function gteHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `${scope.column} >= ${scope.value}`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function inHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `${scope.column} IN (${scope.value})`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function containsHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `LOWER(${scope.column}) LIKE LOWER('%${scope.value}%`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function startsWithHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `LOWER(${scope.column}) LIKE LOWER('${scope.value}%`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 function endsWithHandle(scope: ScopeOptions, conditions: any[]) {
   const condition = `LOWER(${scope.column}) LIKE LOWER('%${scope.value}`;
-  conditions.push((qb, alias) => qb.andWhere(`"${alias}".${condition}`));
+  conditions.push((qb, alias) => qb.andWhere(`\`${alias}\`.${condition}`));
 }
 
 export function Scope<Entity>(
