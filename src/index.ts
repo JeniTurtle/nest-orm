@@ -11,9 +11,9 @@ export * from './decorator';
 export * from './scope';
 export * from './operator';
 
-import { BasicService } from './basic.service';
+import { BasicService, Service } from './basic.service';
 import { Repository } from 'typeorm';
 
-export function getService<T>(repository: Repository<T>) {
-  return BasicService.getService<T>(repository);
+export function getService<T, S extends Service<T> = Service<T>>(repository: Repository<T>) {
+  return BasicService.getService<T, S>(repository);
 }

@@ -497,25 +497,25 @@ export class Service<E> {
 }
 
 export class BasicService {
-  static serviceMap: Map<string, Service<any>> = new Map();
+  static serviceMap: Map<string, any> = new Map();
 
-  static getService<T>(repository: Repository<T>): Service<T> {
+  static getService<T, S extends Service<T> = Service<T>>(repository: Repository<T>): S {
     // @ts-ignore
     const serviceConstructor = repository.manager.connection.options.serviceClass;
-    const ServiceClass: ServiceConstructor<T> = typeof serviceConstructor === 'function' ? serviceConstructor : Service;
+    const ServiceClass: ServiceConstructor<T, S> = typeof serviceConstructor === 'function' ? serviceConstructor : Service;
     const className = repository.metadata.tablePath;
     if (this.serviceMap.has(className)) {
-      const service = this.serviceMap.get(className);
+      const service: S = this.serviceMap.get(className);
       if (service && service.repository === repository) {
         return service;
       }
     }
-    const newService = new ServiceClass(repository);
+    const newService: S = new ServiceClass(repository);
     this.serviceMap.set(className, newService);
     return newService;
   }
 
-  getService<T>(repository: Repository<T>): Service<T> {
-    return BasicService.getService<T>(repository);
+  getService<T, S extends Service<T> = Service<T>>(repository: Repository<T>) {
+    return BasicService.getService<T, S>(repository);
   }
 }
