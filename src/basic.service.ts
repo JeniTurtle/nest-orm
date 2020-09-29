@@ -317,10 +317,10 @@ export class Service<E> {
     return await this.repository.save(results, { reload: true });
   }
 
-  async updateById(data: QueryDeepPartialEntity<E>, id: any, userId: any) {
+  async updateById(data: DeepPartial<E>, id: any, userId: any) {
     const where: FindConditions<E> = {};
     where[this.idColumn] = id;
-    return await this.update(data, where, userId);
+    return await this.updateOne(data, where, userId);
   }
 
   async update(

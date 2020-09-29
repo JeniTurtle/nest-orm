@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { getConnectionToken, getRepositoryToken } from '@nestjs/typeorm';
 import { Service } from './basic.service';
+import { ServiceConstructor } from './orm.interface';
 
 export function getOrmServiceToken(
   entity: Function,
@@ -23,16 +24,19 @@ export function createServiceProviders(
   return entities.map(entity => ({
     provide: getOrmServiceToken(entity, options),
     useFactory: (connection: Connection) => {
+      // @ts-ignore
+      const serviceConstructor = connection.options.serviceClass;
+      const ServiceClass: ServiceConstructor<unknown> = typeof serviceConstructor === 'function' ? serviceConstructor : Service;
       if (
         entity.prototype instanceof Repository ||
         entity.prototype instanceof AbstractRepository
       ) {
-        return new Service<unknown>(connection.getCustomRepository(entity));
+        return new ServiceClass(connection.getCustomRepository(entity));
       }
 
       return connection.options.type === 'mongodb'
-        ? new Service<unknown>(connection.getMongoRepository(entity))
-        : new Service<unknown>(connection.getRepository(entity));
+        ? new ServiceClass(connection.getMongoRepository(entity))
+        : new ServiceClass(connection.getRepository(entity));
     },
     inject: [getConnectionToken(options)],
   }));
