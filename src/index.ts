@@ -10,3 +10,10 @@ export * from './basic.entity';
 export * from './decorator';
 export * from './scope';
 export * from './operator';
+
+import { BasicService } from './basic.service';
+import { Repository } from 'typeorm';
+
+export function getService<T>(repository: Repository<T>) {
+  return BasicService.getService<T>(repository);
+}

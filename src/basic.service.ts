@@ -23,6 +23,7 @@ import {
   ENTITY_CREATED_USER_COLUMN,
   ENTITY_UPDATED_USER_COLUMN,
 } from './decorator/decorator.constant';
+import { ServiceConstructor } from './orm.interface';
 
 type FindParams<E> = { orderBy?: string } & FindManyOptions<E>;
 
@@ -499,14 +500,17 @@ export class BasicService {
   static serviceMap: Map<string, Service<any>> = new Map();
 
   static getService<T>(repository: Repository<T>): Service<T> {
-    const className = repository.metadata.name;
+    // @ts-ignore
+    const serviceConstructor = repository.manager.connection.options.serviceClass;
+    const ServiceClass: ServiceConstructor<T> = typeof serviceConstructor === 'function' ? serviceConstructor : Service;
+    const className = repository.metadata.tablePath;
     if (this.serviceMap.has(className)) {
       const service = this.serviceMap.get(className);
       if (service && service.repository === repository) {
         return service;
       }
     }
-    const newService = new Service<T>(repository);
+    const newService = new ServiceClass(repository);
     this.serviceMap.set(className, newService);
     return newService;
   }
