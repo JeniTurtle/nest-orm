@@ -318,10 +318,10 @@ export class Service<E> {
     return await this.repository.save(results, { reload: true });
   }
 
-  async updateById(data: DeepPartial<E>, id: any, userId: any) {
+  async updateById(data: QueryDeepPartialEntity<E>, id: any, userId: any) {
     const where: FindConditions<E> = {};
     where[this.idColumn] = id;
-    return await this.updateOne(data, where, userId);
+    return await this.update(data, where, userId);
   }
 
   async update(
@@ -352,7 +352,7 @@ export class Service<E> {
     data: DeepPartial<E>,
     where: FindConditions<E>,
     userId: any
-  ): Promise<E | false> {
+  ): Promise<E> {
     if (this.updatedUserColumn) {
       data[this.updatedUserColumn] = userId;
     }
@@ -360,7 +360,7 @@ export class Service<E> {
       where: this.processWhereOptions(where),
     });
     if (!found) {
-      return false;
+      return null;
     }
     const merged = this.repository.merge(found, data);
     return await this.repository.save(merged);
